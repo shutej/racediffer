@@ -10,28 +10,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Install Go
-        uses: actions/setup-go@v4
+      - uses: actions/checkout@v3
+      - uses: thatisuday/go-cross-build@v1
         with:
-          go-version: 1.18
-
-      - name: Cross-compile
-        run: |
-          CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o racediffer_linux_amd64 .
-          CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 go build -o racediffer_darwin_amd64 .
-          CGO_ENABLED=1 GOOS=windows GOARCH=amd64 go build -o racediffer_windows_amd64.exe .
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
+          platforms: linux/amd64, windows/amd64, darwin/amd64
+      - uses: softprops/action-gh-release@v1
         with:
-          files: |
-            racediffer_linux_amd64
-            racediffer_macos_amd64
-            racediffer_windows_amd64.exe
-          tag_name: ${{ github.sha }}
-          release_name: racediffer
+          name: ${{ github.event.head_commit.name }}
+          tag_name: ${{ github.event.head_commit.sha }}
+          prerelease: false
