@@ -15,6 +15,7 @@ jobs:
       - uses: thatisuday/go-cross-build@v1
         with:
           platforms: linux/amd64, windows/amd64, darwin/amd64
+          name: racediffer
       - uses: softprops/action-gh-release@v1
         with:
           name: ${{ github.event.head_commit.name }}
