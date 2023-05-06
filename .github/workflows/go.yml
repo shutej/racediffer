@@ -12,11 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: thatisuday/go-cross-build@v1
+      - uses: crazy-max/ghaction-xgo@v2
         with:
-          platforms: linux/amd64, windows/amd64, darwin/amd64, darwin/arm64
-          package: ''
-          name: racediffer
+          targets: linux/amd64, windows/amd64, darwin/amd64, darwin/arm64
+          prefix: racediffer
           dest: dist
       - uses: softprops/action-gh-release@v1
         with:
