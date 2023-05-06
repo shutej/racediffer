@@ -1,9 +1,11 @@
 name: Cross-compile Racediffer
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
+  
 
 jobs:
   build:
