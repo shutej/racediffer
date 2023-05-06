@@ -1,25 +1,35 @@
-# workflow name
-name: Generate release-artifacts
+name: Cross-compile Racediffer
 
-# on events
 on:
-  release:
-    types: 
-        - created
+  push:
+    branches:
+      - main
 
-# workflow tasks
 jobs:
-  generate:
-    name: Generate cross-platform builds
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout the repository
+      - name: Checkout
         uses: actions/checkout@v3
-      - name: Generate build files
-        uses: thatisuday/go-cross-build@v1
+
+      - name: Install Go
+        uses: actions/setup-go@v4
         with:
-            platforms: 'linux/amd64, darwin/amd64, windows/amd64'
-            package: ''
-            name: 'racediffer'
-            compress: 'true'
-            dest: 'dist'
+          go-version: 1.18
+
+      - name: Cross-compile
+        run: |
+          GOOS=linux GOARCH=amd64 go build -o racediffer_linux_amd64 .
+          GOOS=darwin GOARCH=amd64 go build -o racediffer_darwin_amd64 .
+          GOOS=windows GOARCH=amd64 go build -o racediffer_windows_amd64.exe .
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            racediffer_linux_amd64
+            racediffer_macos_amd64
+            racediffer_windows_amd64.exe
+          tag_name: ${{ github.sha }}
+          release_name: racediffer
