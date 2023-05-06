@@ -22,9 +22,9 @@ jobs:
 
       - name: Cross-compile
         run: |
-          GOOS=linux GOARCH=amd64 go build -o racediffer_linux_amd64 .
-          GOOS=darwin GOARCH=amd64 go build -o racediffer_darwin_amd64 .
-          GOOS=windows GOARCH=amd64 go build -o racediffer_windows_amd64.exe .
+          CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o racediffer_linux_amd64 .
+          CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 go build -o racediffer_darwin_amd64 .
+          CGO_ENABLED=1 GOOS=windows GOARCH=amd64 go build -o racediffer_windows_amd64.exe .
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
